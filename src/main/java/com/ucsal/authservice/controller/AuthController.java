@@ -13,13 +13,7 @@ public class AuthController {
     
     @Autowired
     private AuthService authService;
-    
-    @GetMapping("/hello")
-    public String hello() {
-    	return "hello world";
-    }
-    
-    
+       
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody User user) {
         return ResponseEntity.ok(authService.register(user));
