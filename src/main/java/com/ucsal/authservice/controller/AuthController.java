@@ -1,18 +1,24 @@
-package com.ucsal.gerenciamentodeprojetos.controller;
+package com.ucsal.authservice.controller;
 
-import com.ucsal.gerenciamentodeprojetos.dto.AuthRequest;
-import com.ucsal.gerenciamentodeprojetos.entity.User;
-import com.ucsal.gerenciamentodeprojetos.service.AuthService;
+import com.ucsal.authservice.dto.AuthRequest;
+import com.ucsal.authservice.entity.User;
+import com.ucsal.authservice.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController {
     
     @Autowired
     private AuthService authService;
+    
+    @GetMapping("/hello")
+    public String hello() {
+    	return "hello world";
+    }
+    
     
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody User user) {

@@ -1,7 +1,8 @@
-package com.ucsal.gerenciamentodeprojetos.service;
+package com.ucsal.authservice.service;
 
-import com.ucsal.gerenciamentodeprojetos.entity.User;
-import com.ucsal.gerenciamentodeprojetos.repository.UserRepository;
+import com.ucsal.authservice.entity.User;
+import com.ucsal.authservice.infrastructure.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

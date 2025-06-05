@@ -1,6 +1,6 @@
-package com.ucsal.gerenciamentodeprojetos.repository;
+package com.ucsal.authservice.infrastructure;
 
-import com.ucsal.gerenciamentodeprojetos.entity.User;
+import com.ucsal.authservice.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
