@@ -21,8 +21,8 @@ public class AuthService {
         return userRepository.save(user);
     }
     
-    public User authenticate(String username, String password) {
-        User user = userRepository.findByUsername(username)
+    public User authenticate(String email, String password) {
+        User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
             
         if (passwordEncoder.matches(password, user.getPassword())) {
