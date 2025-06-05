@@ -5,4 +5,5 @@
 ## Turma 01 - Noturno - Engenharia de Software
 
 Deve ser utilizado obrigatoriamente a linguagem JAVA com Spring.
+Implementação do microserviço de autenticação usando Token e JWT
 Necessário a identificação da tecnologia utilizada na entrega do formulário com o link desse projeto
