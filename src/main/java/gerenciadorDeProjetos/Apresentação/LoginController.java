@@ -2,59 +2,31 @@ package gerenciadorDeProjetos.Apresentação;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import gerenciadorDeProjetos.Aplicação.DTOs.LoginRequest;
 import gerenciadorDeProjetos.Aplicação.DTOs.LoginResponse;
-import gerenciadorDeProjetos.Aplicação.Serviços.Interfaces.IAdministradorAppServiço;
-import gerenciadorDeProjetos.Aplicação.Serviços.Interfaces.IAlunoAppServiço;
-import gerenciadorDeProjetos.Aplicação.Serviços.Interfaces.IProfessorAppServiço;
-import gerenciadorDeProjetos.Infraestrutura.JwtUtil;
+import gerenciadorDeProjetos.Aplicação.Serviços.AuthenticationService;
 
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/api/auth")
 public class LoginController {
-    
     @Autowired
-    private IAdministradorAppServiço admService;
+    private AuthenticationService authService;
     
-    @Autowired
-    private IProfessorAppServiço profService;
-    
-    @Autowired
-    private IAlunoAppServiço alunoService;
-    
-    @Autowired
-    private JwtUtil jwtUtil;
-
-    @PostMapping
+    @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         try {
-            // Tenta login como administrador
-            if (admService.logar(request.getEmail(), request.getSenha())) {
-                Long id = admService.buscarEmail(request.getEmail());
-                String token = jwtUtil.generateToken(request.getEmail(), "ROLE_ADMIN");
-                return ResponseEntity.ok(new LoginResponse("ROLE_ADMIN", token, id));
-            }
-            
-            // Tenta login como professor
-            if (profService.logar(request.getEmail(), request.getSenha())) {
-                Long id = profService.buscarEmail(request.getEmail());
-                String token = jwtUtil.generateToken(request.getEmail(), "ROLE_PROFESSOR");
-                return ResponseEntity.ok(new LoginResponse("ROLE_PROFESSOR", token, id));
-            }
-            
-            // Tenta login como aluno
-            if (alunoService.logar(request.getEmail(), request.getSenha())) {
-                Long id = alunoService.buscarEmail(request.getEmail());
-                String token = jwtUtil.generateToken(request.getEmail(), "ROLE_ALUNO");
-                return ResponseEntity.ok(new LoginResponse("ROLE_ALUNO", token, id));
-            }
-            
+            return ResponseEntity.ok(authService.authenticate(request));
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/validate")
+    public ResponseEntity<Boolean> validateToken(@RequestHeader("Authorization") String token) {
+        try {
+            return ResponseEntity.ok(authService.validateToken(token.replace("Bearer ", "")));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }

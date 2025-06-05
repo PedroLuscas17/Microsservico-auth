@@ -3,6 +3,7 @@ package gerenciadorDeProjetos.Aplicação.Serviços;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import gerenciadorDeProjetos.Aplicação.Serviços.Interfaces.IAdministradorAppServiço;
@@ -14,6 +15,9 @@ public class AdministradorAppServiço implements IAdministradorAppServiço {
 
     @Autowired
     private IAdministradorRepositorio administradorRepo;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public Long buscarEmail(String email) {
@@ -27,18 +31,19 @@ public class AdministradorAppServiço implements IAdministradorAppServiço {
         Administrador novoAdmin = new Administrador();
         novoAdmin.setNome(nome);
         novoAdmin.setEmail(email);
-        novoAdmin.setSenha(senha); 
+        novoAdmin.setSenha(passwordEncoder.encode(senha));
 
         return administradorRepo.save(novoAdmin);
     }
     
+    @Override
     public boolean logar(String email, String senha) {
-    	Optional<Administrador> adm = administradorRepo.findByEmailAndSenha(email, senha);
-    	
-        if (!adm.isPresent()) {
-            return false;
+        Optional<Administrador> adm = administradorRepo.findByEmail(email);
+        
+        if (adm.isPresent()) {
+            return passwordEncoder.matches(senha, adm.get().getSenha());
         }
-    	
-        return true;
+        
+        return false;
     }
 }
